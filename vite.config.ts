@@ -9,5 +9,6 @@ export default defineConfig(() => ({
   plugins: [react()],
   test: {
     environment: 'happy-dom',
+    setupFiles: ['./vitest.setup.ts'],
   },
 }));
