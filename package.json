@@ -21,6 +21,7 @@
     "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./dist  --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@contentful/app-scripts": "1.19.1",
     "@testing-library/react": "14.0.0",
     "@types/node": "16.18.38",
