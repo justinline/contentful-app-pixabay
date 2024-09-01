@@ -1,26 +1,28 @@
-import { locations } from '@contentful/app-sdk';
-import { useSDK } from '@contentful/react-apps-toolkit';
-import { useMemo } from 'react';
-import Dialog from './locations/Dialog';
-import Field from './locations/Field';
+import { locations } from "@contentful/app-sdk";
+import { useSDK } from "@contentful/react-apps-toolkit";
+import { useMemo } from "react";
+// import Dialog from "./locations/Dialog";
+import PixabayImageField from "./locations/PixabayImageField";
 
 const ComponentLocationSettings = {
-  [locations.LOCATION_ENTRY_FIELD]: Field,
-  [locations.LOCATION_DIALOG]: Dialog,
+	[locations.LOCATION_ENTRY_FIELD]: PixabayImageField,
+	// [locations.LOCATION_DIALOG]: Dialog,
 };
 
 const App = () => {
-  const sdk = useSDK();
+	const sdk = useSDK();
 
-  const Component = useMemo(() => {
-    for (const [location, component] of Object.entries(ComponentLocationSettings)) {
-      if (sdk.location.is(location)) {
-        return component;
-      }
-    }
-  }, [sdk.location]);
+	const Component = useMemo(() => {
+		for (const [location, component] of Object.entries(
+			ComponentLocationSettings,
+		)) {
+			if (sdk.location.is(location)) {
+				return component;
+			}
+		}
+	}, [sdk.location]);
 
-  return Component ? <Component /> : null;
+	return Component ? <Component /> : null;
 };
 
 export default App;

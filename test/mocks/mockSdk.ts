@@ -10,6 +10,10 @@ const mockSdk: any = {
   ids: {
     app: 'test-app',
   },
+  field: {
+    getValue: vi.fn(),
+    removeValue: vi.fn(),
+  },
 };
 
 export { mockSdk };
