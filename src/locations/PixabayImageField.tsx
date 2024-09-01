@@ -23,6 +23,25 @@ const PixabayImageField = () => {
 		}
 	}, [sdk.field, setSelectedImages]);
 
+	const openDialog = async () => {
+		const result = await sdk.dialogs.openCurrent({
+			width: "fullWidth",
+			minHeight: "600px",
+			position: "center",
+			title: "Select images from Pixabay",
+			shouldCloseOnOverlayClick: true,
+			shouldCloseOnEscapePress: true,
+		});
+
+		const parsedResult = SelectedImagesSchema.parse(result);
+
+		if (result && Array.isArray(result) && selectedImages !== undefined) {
+			const updatedImages = parsedResult;
+			setSelectedImages(updatedImages);
+			sdk.field.setValue(updatedImages);
+		}
+	};
+
 	if (selectedImages === undefined || selectedImages.length === 0) {
 		return (
 			<Card padding="large">
@@ -33,7 +52,7 @@ const PixabayImageField = () => {
 					style={{ width: "100%" }}
 				>
 					<SearchIcon size="xlarge" />
-					<Button>Select Images from Pixabay</Button>
+					<Button onClick={openDialog}>Select Images from Pixabay</Button>
 				</Flex>
 			</Card>
 		);
@@ -46,7 +65,7 @@ const PixabayImageField = () => {
 					<li key={image}>{image}</li>
 				))}
 			</ul>
-			<Button>Add More</Button>
+			<Button onClick={openDialog}>Re-choose Images</Button>
 		</Card>
 	);
 };
