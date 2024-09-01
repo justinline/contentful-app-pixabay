@@ -7,7 +7,7 @@ import { z } from "zod";
 
 const SelectedImagesSchema = z.array(z.string());
 
-const PixabayImageField = () => {
+function PixabayImageField() {
 	const sdk = useSDK<FieldAppSDK>();
 	const [selectedImages, setSelectedImages] =
 		useFieldValue<string[]>("pixabayurl");
@@ -68,6 +68,6 @@ const PixabayImageField = () => {
 			<Button onClick={openDialog}>Re-choose Images</Button>
 		</Card>
 	);
-};
+}
 
 export default PixabayImageField;

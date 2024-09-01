@@ -26,7 +26,7 @@ const PixabaySearchResultsSchema = z.object({
 
 type PixabayImage = z.infer<typeof PixabayImageSchema>;
 
-const PixabaySearchDialog = () => {
+function PixabaySearchDialog() {
 	const sdk = useSDK<DialogAppSDK>();
 	const [searchResults, setSearchResults] = useState<PixabayImage[] | "ERROR">(
 		[],
@@ -85,7 +85,7 @@ const PixabaySearchDialog = () => {
 			<div>{toolbar}</div>
 		</Flex>
 	);
-};
+}
 
 function SearchForm({
 	setSearchResults,
