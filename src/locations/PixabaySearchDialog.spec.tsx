@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { mockCma, mockSdk } from "../../test/mocks";
 import PixabaySearchDialog from "./PixabaySearchDialog";
-import { server } from "../../tests/server";
+import { server } from "../../test/server";
 import { http, HttpResponse } from "msw";
 
 vi.mock("@contentful/react-apps-toolkit", () => ({

@@ -1,6 +1,6 @@
 import { cleanup } from '@testing-library/react'
 import { beforeAll, afterEach, afterAll } from 'vitest'
-import { server } from './tests/server'
+import { server } from './server'
 
 // Start the interception.
 beforeAll(() => server.listen())
