@@ -10,6 +10,19 @@ vi.mock("@contentful/react-apps-toolkit", () => ({
 	useCMA: () => mockCma,
 }));
 
+const mockImages = [
+	{
+		id: 1,
+		webformatURL: "https://example.com/image1.jpg",
+		tags: "nature, landscape",
+	},
+	{
+		id: 2,
+		webformatURL: "https://example.com/image2.jpg",
+		tags: "city, urban",
+	},
+];
+
 describe("PixabaySearchDialog component", () => {
 	it("Search form elements exists on open", () => {
 		render(<PixabaySearchDialog />);
@@ -28,18 +41,7 @@ describe("PixabaySearchDialog component", () => {
 		server.use(
 			http.get("https://pixabay.com/api/", () => {
 				return HttpResponse.json({
-					hits: [
-						{
-							id: 1,
-							webformatURL: "https://example.com/image1.jpg",
-							tags: "nature, landscape",
-						},
-						{
-							id: 2,
-							webformatURL: "https://example.com/image2.jpg",
-							tags: "city, urban",
-						},
-					],
+					hits: mockImages,
 				});
 			}),
 		);
@@ -65,5 +67,56 @@ describe("PixabaySearchDialog component", () => {
 		const image2 = screen.getByAltText("city, urban");
 		expect(image1).toBeDefined();
 		expect(image2).toBeDefined();
+	});
+
+	it("allows image selection and displays submit button", async () => {
+		server.use(
+			http.get("https://pixabay.com/api/", () => {
+				return HttpResponse.json({
+					hits: mockImages,
+				});
+			}),
+		);
+
+		render(<PixabaySearchDialog />);
+
+		const searchField = screen.getByPlaceholderText("Search for images...");
+		const searchButton = screen.getByRole("button", { name: /search/i });
+
+		fireEvent.change(searchField, { target: { value: "test query" } });
+		fireEvent.click(searchButton);
+
+		await waitFor(() => {
+			const images = screen.getAllByRole("img");
+			expect(images).toHaveLength(2);
+		});
+
+		// Select the first image
+		const firstImageCheckbox = screen.getByLabelText(
+			"Select image with tags: nature, landscape",
+		) as HTMLInputElement;
+		fireEvent.click(firstImageCheckbox);
+
+		// Check that the checkbox is checked
+		expect(firstImageCheckbox.checked).toBe(true);
+
+		// Check that the submit button appears with the correct text
+		const submitButton = screen.getByRole("button", {
+			name: /attach 1 image/i,
+		});
+
+		expect(submitButton).toBeDefined();
+
+		// Select the second image
+		const secondImageCheckbox = screen.getByLabelText(
+			"Select image with tags: city, urban",
+		) as HTMLInputElement;
+		fireEvent.click(secondImageCheckbox);
+
+		// Check that both checkboxes are checked
+		expect(firstImageCheckbox.checked).toBe(true);
+		expect(secondImageCheckbox.checked).toBe(true);
+
+		expect(submitButton.innerText).toContain("2");
 	});
 });
