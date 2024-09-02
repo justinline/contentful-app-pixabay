@@ -66,7 +66,7 @@ function PixabayImageField() {
 
 	if (selectedImages === undefined || selectedImages.length === 0) {
 		return (
-			<Card padding="large">
+			<Card>
 				<Flex
 					flexDirection="column"
 					justifyContent="center"
@@ -83,7 +83,7 @@ function PixabayImageField() {
 	}
 
 	return (
-		<Card padding="large">
+		<Card>
 			<SelectedImagePreview
 				selectedImages={selectedImages}
 				onRemove={removeImage}

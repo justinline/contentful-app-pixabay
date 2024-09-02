@@ -20,7 +20,7 @@ const SelectedImagePreview: React.FC<SelectedImagePreviewProps> = ({
 				overflowX: "auto",
 				overflowY: "hidden",
 				whiteSpace: "nowrap",
-				padding: "1rem",
+				padding: "0.5rem",
 			}}
 		>
 			{selectedImages.map((imageUrl) => (
