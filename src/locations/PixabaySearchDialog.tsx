@@ -13,6 +13,7 @@ import tokens from "@contentful/f36-tokens";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { useState } from "react";
 import { z } from "zod";
+import SelectedImagePreview from "../components/SelectedImagePreview";
 
 const PixabayImageSchema = z.object({
 	id: z.number(),
@@ -55,9 +56,19 @@ function PixabaySearchDialog() {
 					confirmSelection();
 				}}
 			>
-				<Button type="submit" isDisabled={selectedImageUrls.length === 0}>
-					Attach {selectedImageUrls.length} images
-				</Button>
+				<Flex gap="spacingM" alignItems="center">
+					<Button
+						type="submit"
+						isDisabled={selectedImageUrls.length === 0}
+						style={{ minWidth: "12rem" }}
+					>
+						Attach {selectedImageUrls.length} images
+					</Button>
+					<SelectedImagePreview
+						selectedImages={selectedImageUrls}
+						onRemove={toggleImageSelection}
+					/>
+				</Flex>
 			</form>
 		);
 
