@@ -8,7 +8,7 @@ import SelectedImagePreview from "../components/SelectedImagePreview";
 
 const SelectedImagesSchema = z.array(z.string());
 
-function PixabayImageField() {
+export default function PixabayImageField() {
 	const sdk = useSDK<FieldAppSDK>();
 	const [selectedImages, setSelectedImages] = useFieldValue<string[]>(
 		sdk.field.id,
@@ -94,5 +94,3 @@ function PixabayImageField() {
 		</Card>
 	);
 }
-
-export default PixabayImageField;

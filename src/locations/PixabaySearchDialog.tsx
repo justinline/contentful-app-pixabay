@@ -27,17 +27,14 @@ const PixabaySearchResultsSchema = z.object({
 
 type PixabayImage = z.infer<typeof PixabayImageSchema>;
 
-function PixabaySearchDialog() {
-	const sdk = useSDK<DialogAppSDK>();
+export default function PixabaySearchDialog() {
 	const [searchResults, setSearchResults] = useState<PixabayImage[] | "ERROR">(
 		[],
 	);
-	// Ultimately went with a hashmap to store image urls which is easier/more performant to work with than the final result (array of strings)
 	const [selectedImageUrls, setSelectedImageUrls] = useState<
 		Record<PixabayImage["webformatURL"], true>
 	>({});
 
-	const amountOfImages = Object.keys(selectedImageUrls).length;
 	const arrayOfUrls = Object.keys(selectedImageUrls);
 
 	const onCheckImage = (imageUrl: string) =>
@@ -48,36 +45,6 @@ function PixabaySearchDialog() {
 
 			return newState;
 		});
-
-	const confirmSelection = () => {
-		sdk.close(arrayOfUrls);
-	};
-
-	const toolbar =
-		amountOfImages === 0 ? (
-			<SearchForm setSearchResults={setSearchResults} />
-		) : (
-			<form
-				onSubmit={(e) => {
-					e.preventDefault();
-					confirmSelection();
-				}}
-			>
-				<Flex gap="spacingM" alignItems="center">
-					<Button
-						type="submit"
-						isDisabled={amountOfImages === 0}
-						style={{ minWidth: "12rem" }}
-					>
-						Attach {amountOfImages} images
-					</Button>
-					<SelectedImagePreview
-						selectedImages={arrayOfUrls}
-						onRemove={onCheckImage}
-					/>
-				</Flex>
-			</form>
-		);
 
 	return (
 		<Flex
@@ -93,6 +60,7 @@ function PixabaySearchDialog() {
 				bottom: "0",
 			}}
 		>
+			{/* Scrollable content */}
 			<div style={{ overflowY: "auto", flexGrow: 1 }}>
 				<SearchResults
 					searchResults={searchResults}
@@ -100,8 +68,56 @@ function PixabaySearchDialog() {
 					onCheckImage={onCheckImage}
 				/>
 			</div>
-			<div>{toolbar}</div>
+			{/* Fixed toolbar */}
+			<div>
+				{arrayOfUrls.length === 0 ? (
+					<SearchForm setSearchResults={setSearchResults} />
+				) : (
+					<ConfirmOrChangeForm
+						arrayOfUrls={arrayOfUrls}
+						onCheckImage={onCheckImage}
+					/>
+				)}
+			</div>
 		</Flex>
+	);
+}
+
+function ConfirmOrChangeForm({
+	arrayOfUrls,
+	onCheckImage,
+}: {
+	arrayOfUrls: string[];
+	onCheckImage: (imageUrl: string) => void;
+}) {
+	const sdk = useSDK<DialogAppSDK>();
+	const confirmSelection = () => {
+		sdk.close(arrayOfUrls);
+	};
+
+	const amountOfImages = arrayOfUrls.length;
+
+	return (
+		<form
+			onSubmit={(e) => {
+				e.preventDefault();
+				confirmSelection();
+			}}
+		>
+			<Flex gap="spacingM" alignItems="center">
+				<Button
+					type="submit"
+					isDisabled={amountOfImages === 0}
+					style={{ minWidth: "12rem" }}
+				>
+					Attach {amountOfImages} images
+				</Button>
+				<SelectedImagePreview
+					selectedImages={arrayOfUrls}
+					onRemove={onCheckImage}
+				/>
+			</Flex>
+		</form>
 	);
 }
 
@@ -266,5 +282,3 @@ function SearchResult({
 		</label>
 	);
 }
-
-export default PixabaySearchDialog;
