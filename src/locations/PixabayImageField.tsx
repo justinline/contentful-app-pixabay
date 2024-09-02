@@ -10,8 +10,9 @@ const SelectedImagesSchema = z.array(z.string());
 
 function PixabayImageField() {
 	const sdk = useSDK<FieldAppSDK>();
-	const [selectedImages, setSelectedImages] =
-		useFieldValue<string[]>("pixabayurl");
+	const [selectedImages, setSelectedImages] = useFieldValue<string[]>(
+		sdk.field.id,
+	);
 
 	const [isLoading, setIsLoading] = useState(false);
 
