@@ -27,6 +27,12 @@ const PixabaySearchResultsSchema = z.object({
 
 type PixabayImage = z.infer<typeof PixabayImageSchema>;
 
+/**
+ * This dialog allows users to use the pixabay API to search for images, select/remove them and then
+ * submit them back to the PixabayImageField.
+ *
+ * Requires a pixabay API key to be set in the environment variables: `VITE_PIXABAY_API_KEY`
+ */
 export default function PixabaySearchDialog() {
 	const [searchResults, setSearchResults] = useState<PixabayImage[] | "ERROR">(
 		[],
@@ -83,6 +89,7 @@ export default function PixabaySearchDialog() {
 	);
 }
 
+/** Allows users to modify or confirm the image selection */
 function ConfirmOrChangeForm({
 	arrayOfUrls,
 	onCheckImage,
@@ -121,6 +128,7 @@ function ConfirmOrChangeForm({
 	);
 }
 
+/** Allows users to search for images via pixabay */
 function SearchForm({
 	setSearchResults,
 }: { setSearchResults: (searchResults: PixabayImage[] | "ERROR") => void }) {
@@ -176,6 +184,7 @@ function SearchForm({
 	);
 }
 
+/** Displays images returned from the pixabay search API */
 function SearchResults({
 	searchResults,
 	selectedImageUrls,

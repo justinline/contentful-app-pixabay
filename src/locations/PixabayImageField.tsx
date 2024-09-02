@@ -8,6 +8,12 @@ import SelectedImagePreview from "../components/SelectedImagePreview";
 
 const SelectedImagesSchema = z.array(z.string());
 
+/**
+ * This field prompts users to select images from pixabay by opening a dialog if no images are selected,
+ * and displaying the selected images otherwise; which can be removed or re-chosen if desired.
+ *
+ * This field is intended to be used in a "Short text, list" field in the content model.
+ */
 export default function PixabayImageField() {
 	const sdk = useSDK<FieldAppSDK>();
 	const [selectedImages, setSelectedImages] = useFieldValue<string[]>(
