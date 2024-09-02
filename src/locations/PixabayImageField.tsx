@@ -2,8 +2,9 @@ import type { FieldAppSDK } from "@contentful/app-sdk";
 import { Button, Card, Flex } from "@contentful/f36-components";
 import { SearchIcon } from "@contentful/f36-icons";
 import { useFieldValue, useSDK } from "@contentful/react-apps-toolkit";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
+import SelectedImagePreview from "../components/SelectedImagePreview";
 
 const SelectedImagesSchema = z.array(z.string());
 
@@ -11,6 +12,8 @@ function PixabayImageField() {
 	const sdk = useSDK<FieldAppSDK>();
 	const [selectedImages, setSelectedImages] =
 		useFieldValue<string[]>("pixabayurl");
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		try {
@@ -33,13 +36,31 @@ function PixabayImageField() {
 			shouldCloseOnEscapePress: true,
 		});
 
-		const parsedResult = SelectedImagesSchema.parse(result);
+		setIsLoading(true);
 
-		if (result && Array.isArray(result) && selectedImages !== undefined) {
-			const updatedImages = parsedResult;
-			setSelectedImages(updatedImages);
-			sdk.field.setValue(updatedImages);
+		try {
+			const parsedResult = SelectedImagesSchema.parse(result);
+
+			if (result && Array.isArray(result)) {
+				const updatedImages = parsedResult;
+				await setSelectedImages(updatedImages);
+			}
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setIsLoading(false);
 		}
+	};
+
+	const removeImage = (imageUrl: string) => {
+		if (selectedImages === undefined) throw new Error("No images selected");
+
+		setIsLoading(true);
+
+		const updatedImages = selectedImages.filter((url) => url !== imageUrl);
+		setSelectedImages(updatedImages).finally(() => {
+			setIsLoading(false);
+		});
 	};
 
 	if (selectedImages === undefined || selectedImages.length === 0) {
@@ -52,7 +73,9 @@ function PixabayImageField() {
 					style={{ width: "100%" }}
 				>
 					<SearchIcon size="xlarge" />
-					<Button onClick={openDialog}>Select Images from Pixabay</Button>
+					<Button onClick={openDialog} isLoading={isLoading}>
+						Select Images from Pixabay
+					</Button>
 				</Flex>
 			</Card>
 		);
@@ -60,12 +83,13 @@ function PixabayImageField() {
 
 	return (
 		<Card padding="large">
-			<ul>
-				{selectedImages.map((image) => (
-					<li key={image}>{image}</li>
-				))}
-			</ul>
-			<Button onClick={openDialog}>Re-choose Images</Button>
+			<SelectedImagePreview
+				selectedImages={selectedImages}
+				onRemove={removeImage}
+			/>
+			<Button onClick={openDialog} isLoading={isLoading}>
+				Re-choose Images
+			</Button>
 		</Card>
 	);
 }
