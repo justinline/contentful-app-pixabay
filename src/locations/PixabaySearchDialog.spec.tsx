@@ -27,7 +27,7 @@ describe("PixabaySearchDialog component", () => {
 	it("Search form elements exists on open", () => {
 		render(<PixabaySearchDialog />);
 
-		const searchField = screen.getByPlaceholderText("Search for images...");
+		const searchField = screen.getByPlaceholderText("Enter search term");
 		const searchButton = screen.getByRole("button", {
 			name: /search/i,
 		});
@@ -48,7 +48,7 @@ describe("PixabaySearchDialog component", () => {
 
 		render(<PixabaySearchDialog />);
 
-		const searchField = screen.getByPlaceholderText("Search for images...");
+		const searchField = screen.getByPlaceholderText("Enter search term");
 		const searchButton = screen.getByRole("button", {
 			name: /search/i,
 		});
@@ -80,7 +80,7 @@ describe("PixabaySearchDialog component", () => {
 
 		render(<PixabaySearchDialog />);
 
-		const searchField = screen.getByPlaceholderText("Search for images...");
+		const searchField = screen.getByPlaceholderText("Enter search term");
 		const searchButton = screen.getByRole("button", { name: /search/i });
 
 		fireEvent.change(searchField, { target: { value: "test query" } });

@@ -174,7 +174,7 @@ function SearchForm({
 				<TextInput
 					value={searchQuery}
 					onChange={(e) => setSearchQuery(e.target.value)}
-					placeholder="Search for images..."
+					placeholder="Enter search term"
 				/>
 				<Button type="submit" startIcon={<SearchIcon />}>
 					Search
