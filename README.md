@@ -27,6 +27,15 @@ I could imagine a more flexible flow where users can select multiple images from
 - I wanted to use the f36 `<Image/>` component, but the skeleton only loads without a `src` which we always have in this flow, so instead I went with `<img>` + custom loading styling
 - With regards to styling, I went with inline `style` props, this is what I saw most in the examples I could find across the web. It was a little limiting in terms of UI design however.
 
+## App Screenshots
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+  <img src="./docs/DefaultFieldState.png" style="width: 100%;">
+  <img src="./docs/SelectedFieldState.png" style="width: 100%;">
+  <img src="./docs/DefaultDialogState.png" style="width: 100%;">
+  <img src="./docs/SelectedDialogState.png" style="width: 100%;">
+</div>
+
 ## How to use
 
 Execute create-contentful-app with npm, npx or yarn to bootstrap the example:
