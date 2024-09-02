@@ -1,4 +1,30 @@
-This project was bootstrapped with [Create Contentful App](https://github.com/contentful/create-contentful-app).
+# Contentful - Pixabay Image Search app
+
+App sharing link: https://app.contentful.com/deeplink?link=apps&id=64T0XzVrPFmXQl6jnP3QZn
+
+- Uses a "Short text, list" field in the content model to store the images
+
+The user flow for this app is - right now - quite prescriptive, but it could be built upon depending on the needs of the intended demo audience.
+- Users can select multiple images from a single search term only
+- Users can remove images individually once chosen
+- Users can re-choose the images (however this overwrites all previous images)
+
+I could imagine a more flexible flow where users can select multiple images from multiple search terms, and edit this after initial selection without overwriting previous images, but I kept it simple for now.
+
+## Decisions
+
+- I added `zod` for runtime type validation of the content coming from contentful
+- I added biome for formatting/linting since it's a quick setup
+- I switched to `function Component()` over `const Component = () => {}` for the locations folder so that I could hoist sub-components that were defined lower down in the modules, to keep the coupled things together.
+- I used mock service worker to mock api responses forthe pixabay api in test environments. This library could also be set up to run in the browser if building demo's ahead of endpoints/functionalities being available
+
+
+## Other thoughts/feedback
+
+- The most confusing thing was working out how to create a content model on a new account, requiring the developer mode switched on wasn't obvious since i'm used to just having it available. Might be worth adding a note in the pdf instructions, unless it's meant to be part of the challenge!
+- The build currently exposes the pixabay api key, which is not ideal - not sure if contentful has ways to better handle environment variables in apps
+- I wanted to use the f36 `<Image/>` component, but the skeleton only loads without a `src` which we always have in this flow, so instead I went with `<img>` + custom loading styling
+- With regards to styling, I went with inline `style` props, this is what I saw most in the examples I could find across the web. It was a little limiting in terms of UI design however.
 
 ## How to use
 
