@@ -18,6 +18,7 @@ I could imagine a more flexible flow where users can select multiple images from
 - I added biome for formatting/linting since it's a quick setup
 - I switched to `function Component()` over `const Component = () => {}` for the locations folder so that I could hoist sub-components that were defined lower down in the modules, to keep the coupled things together.
 - I used mock service worker to mock api responses forthe pixabay api in test environments. This library could also be set up to run in the browser if building demo's ahead of endpoints/functionalities being available
+- I added `tags` to the image search results, mostly to use it as `alt` text for the images in the app since there's no other descriptive image data from the API.
 
 
 ## Other thoughts/feedback
