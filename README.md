@@ -3,6 +3,7 @@
 App sharing link: https://app.contentful.com/deeplink?link=apps&id=64T0XzVrPFmXQl6jnP3QZn
 
 - Uses a "Short text, list" field in the content model to store the images
+- Requires `VITE_PIXABAY_API_KEY` in .env to be set to use the pixabay image search functionality
 
 The user flow for this app is - right now - quite prescriptive, but it could be built upon depending on the needs of the intended demo audience.
 - Users can select multiple images from a single search term only
