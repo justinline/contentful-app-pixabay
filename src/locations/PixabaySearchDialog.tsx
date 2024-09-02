@@ -32,22 +32,29 @@ function PixabaySearchDialog() {
 	const [searchResults, setSearchResults] = useState<PixabayImage[] | "ERROR">(
 		[],
 	);
-	const [selectedImageUrls, setSelectedImageUrls] = useState<string[]>([]);
+	// Ultimately went with a hashmap to store image urls which is easier/more performant to work with than the final result (array of strings)
+	const [selectedImageUrls, setSelectedImageUrls] = useState<
+		Record<PixabayImage["webformatURL"], true>
+	>({});
 
-	const toggleImageSelection = (imageUrl: string) => {
-		setSelectedImageUrls((prev) =>
-			prev.includes(imageUrl)
-				? prev.filter((url) => url !== imageUrl)
-				: [...prev, imageUrl],
-		);
-	};
+	const amountOfImages = Object.keys(selectedImageUrls).length;
+	const arrayOfUrls = Object.keys(selectedImageUrls);
+
+	const onCheckImage = (imageUrl: string) =>
+		setSelectedImageUrls((prev) => {
+			const newState = { ...prev };
+			if (newState[imageUrl] !== undefined) delete newState[imageUrl];
+			else newState[imageUrl] = true;
+
+			return newState;
+		});
 
 	const confirmSelection = () => {
-		sdk.close(selectedImageUrls);
+		sdk.close(arrayOfUrls);
 	};
 
 	const toolbar =
-		selectedImageUrls.length === 0 ? (
+		amountOfImages === 0 ? (
 			<SearchForm setSearchResults={setSearchResults} />
 		) : (
 			<form
@@ -59,14 +66,14 @@ function PixabaySearchDialog() {
 				<Flex gap="spacingM" alignItems="center">
 					<Button
 						type="submit"
-						isDisabled={selectedImageUrls.length === 0}
+						isDisabled={amountOfImages === 0}
 						style={{ minWidth: "12rem" }}
 					>
-						Attach {selectedImageUrls.length} images
+						Attach {amountOfImages} images
 					</Button>
 					<SelectedImagePreview
-						selectedImages={selectedImageUrls}
-						onRemove={toggleImageSelection}
+						selectedImages={arrayOfUrls}
+						onRemove={onCheckImage}
 					/>
 				</Flex>
 			</form>
@@ -89,8 +96,8 @@ function PixabaySearchDialog() {
 			<div style={{ overflowY: "auto", flexGrow: 1 }}>
 				<SearchResults
 					searchResults={searchResults}
-					selectedImageUrls={selectedImageUrls}
-					toggleImageSelection={toggleImageSelection}
+					selectedImageUrls={Object.keys(selectedImageUrls)}
+					onCheckImage={onCheckImage}
 				/>
 			</div>
 			<div>{toolbar}</div>
@@ -156,11 +163,11 @@ function SearchForm({
 function SearchResults({
 	searchResults,
 	selectedImageUrls,
-	toggleImageSelection,
+	onCheckImage,
 }: {
 	searchResults: PixabayImage[] | "ERROR";
 	selectedImageUrls: string[];
-	toggleImageSelection: (imageUrl: string) => void;
+	onCheckImage: (imageUrl: string) => void;
 }) {
 	if (searchResults === "ERROR") {
 		return <p>Error fetching images</p>;
@@ -190,7 +197,7 @@ function SearchResults({
 						key={image.id}
 						image={image}
 						checked={selectedImageUrls.includes(image.webformatURL)}
-						onChange={() => toggleImageSelection(image.webformatURL)}
+						onChange={() => onCheckImage(image.webformatURL)}
 					/>
 				))}
 			</Grid>
