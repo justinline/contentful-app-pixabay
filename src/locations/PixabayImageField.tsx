@@ -20,6 +20,7 @@ export default function PixabayImageField() {
 		sdk.field.id,
 	);
 
+	// Used to indicate loading state in case the field setting takes a while.
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
