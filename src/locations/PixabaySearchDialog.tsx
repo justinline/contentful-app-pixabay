@@ -5,11 +5,11 @@ import {
 	Grid,
 	TextInput,
 	Checkbox,
-	Paragraph,
 	Card,
 	Text,
 } from "@contentful/f36-components";
 import { SearchIcon, ImageIcon } from "@contentful/f36-icons";
+import tokens from "@contentful/f36-tokens";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { useState } from "react";
 import { z } from "zod";
@@ -157,13 +157,13 @@ function SearchResults({
 
 	if (searchResults.length === 0)
 		return (
-			<Card padding="large">
+			<Card padding="large" style={{ height: "100%" }}>
 				<Flex
 					flexDirection="column"
 					justifyContent="center"
 					alignItems="center"
 					gap="spacingM"
-					style={{ width: "100%" }}
+					style={{ width: "100%", height: "100%" }}
 				>
 					<ImageIcon size="xlarge" />
 					<Text>Use the form to search for images</Text>
@@ -195,34 +195,50 @@ function SearchResult({
 	return (
 		<label htmlFor={`image-${image.id}`} key={image.id}>
 			<figure style={{ position: "relative", height: "min-content" }}>
-				<Checkbox
-					id={`image-${image.id}`}
-					aria-label={`Select image with tags: ${image.tags}`}
-					isChecked={checked}
-					onChange={onChange}
-					style={{
-						position: "absolute",
-						top: "-0.25rem",
-						left: "-0.25rem",
-						padding: "0.25rem",
-						background: "white",
-						borderRadius: "4px",
-					}}
-				/>
-				<img
-					src={image.webformatURL}
-					alt={image.tags}
+				{/* Placeholder to stop layout shift/jank when loading images */}
+				<div
 					style={{
 						width: "100%",
+						aspectRatio: "4 / 3",
+						backgroundColor: tokens.gray300,
+						position: "relative",
 					}}
-				/>
+				>
+					<img
+						src={image.webformatURL}
+						alt={image.tags}
+						style={{
+							width: "100%",
+							height: "100%",
+							objectFit: "cover",
+							position: "absolute",
+							top: "0",
+							left: "0",
+						}}
+					/>
+					<Checkbox
+						id={`image-${image.id}`}
+						aria-label={`Select image with tags: ${image.tags}`}
+						isChecked={checked}
+						onChange={onChange}
+						style={{
+							position: "absolute",
+							top: "-0.25rem",
+							left: "-0.25rem",
+							padding: "0.25rem",
+							background: "white",
+							borderRadius: "4px",
+						}}
+					/>
+				</div>
 				<figcaption
 					style={{
 						position: "absolute",
-						left: "0.25rem",
-						bottom: "0.25rem",
-						right: "0.25rem",
+						left: "0.5rem",
+						bottom: "0.5rem",
+						right: "0.5rem",
 						background: "white",
+						padding: "0.25rem 0.5rem",
 						borderRadius: "4px",
 					}}
 				>
